@@ -13,11 +13,11 @@ SYNOPSIS
             <input name="foo.gorch" ... />
         </form>
 
-        # turns params into hashrefs: 
+        # turns params into hashrefs:
 
         $c->req->param('foo')->{bar};
-           
-    $c->req->params({
+
+        $c->req->params({
             # extra params
             foo => {
                 bar => ...,

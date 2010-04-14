@@ -1,32 +1,27 @@
 #!/usr/bin/perl
-	my ( $self, $c ) = @_;
-
 package Catalyst::Plugin::Params::Nested;
 
 use strict;
 use warnings;
+use 5.8.1;
 
-use NEXT;
+use MRO::Compat;
 use Catalyst::Plugin::Params::Nested::Expander ();
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 sub prepare_parameters {
     my $c = shift;
-    my $ret = $c->NEXT::prepare_parameters( @_ );
+    my $ret = $c->maybe::next::method( @_ );
 
     my $params = $c->req->params;
 
     %$params = (
         %$params,
-        %{ Catalyst::Plugin::Params::Nested::Expander->expand_hash( $params ) },
+        %{ Catalyst::Plugin::Params::Nested::Expander->expand_cgi( $c->req ) },
     );
 
     $ret;
-}
-
-sub nested_param {
-    my ( $self, @path ) = @_;
 }
 
 __PACKAGE__;
@@ -51,10 +46,10 @@ Catalyst::Plugin::Params::Nested - Nested form parameters (ala Ruby on Rails).
         <input name="foo.gorch" ... />
     </form>
 
-    # turns params into hashrefs: 
+    # turns params into hashrefs:
 
     $c->req->param('foo')->{bar};
-       
+
     $c->req->params({
         # extra params
         foo => {
@@ -66,7 +61,7 @@ Catalyst::Plugin::Params::Nested - Nested form parameters (ala Ruby on Rails).
         'foo[bar]' => ...,
         'foo.gorch' => ...,
     });
-    
+
 =head1 DESCRIPTION
 
 Ruby on Rails has a nice feature to create nested parameters that help with
@@ -90,8 +85,8 @@ This plugin supports two syntaxes:
 
 =back
 
-When reading query parameters from C<< $c->req >> you can now access the all the items starting 
-with "foo" as one entity using C<< $c->req->param('foo'); >>. Each subitem, denoted by 
+When reading query parameters from C<< $c->req >> you can now access the all the items starting
+with "foo" as one entity using C<< $c->req->param('foo'); >>. Each subitem, denoted by
 either the dot or the square brackets, will be returned as a further deeper hashref.
 
 =head1 INTERNAL METHODS

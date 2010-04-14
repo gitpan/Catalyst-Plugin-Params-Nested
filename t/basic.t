@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockObject::Extends;
 use Test::MockObject;
 
@@ -13,6 +13,15 @@ my $c = Test::MockObject::Extends->new( $m );
 
 $c->set_always( req => my $req = Test::MockObject->new );
 $req->set_always( params => my $params = {} );
+$req->mock(
+  param => sub {
+    my $self = shift;
+    return keys %$params unless @_;
+    my $value = $params->{shift()};
+    # copied from CGI.pm
+    return defined($value) ? (ref($value) && ref($value) eq 'ARRAY' ? @{$value} : $value) : ();
+  }
+);
 
 $c->prepare_parameters;
 is_deeply( $params, {}, "no params");
@@ -40,3 +49,7 @@ is_deeply( $params, { 'foo[bar][baz]' => 2, 'foo[bar][gorch]' => 1, 'foo' => { b
 $c->prepare_parameters;
 is_deeply( $params, { 'foo.bar.baz' => 2, 'foo.bar.gorch' => 1, 'foo' => { bar => { gorch => 1, baz => 2 } } }, "params expanded 2 levels deep, multiple subkeys, dot notation");
 
+%$params = ( 'submit' => 1, 'submit.x' => 2, 'submit.y' => 3 );
+$c->prepare_parameters;
+is_deeply( $params, { submit => 1, 'submit.x' => 2, 'submit.y' => 3 },
+           "params did not expand /\.[xy]$/" );

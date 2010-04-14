@@ -1,2 +1,6 @@
+- 0.03  2010-04-14 22:45:00
+        - Update to change NEXT to MRO::Compat
+        - Change Module::Build to Module::Install
+
 - 0.02  2006-1-10 15:35:00
         - Use CGI::Expand instead of reinventing
