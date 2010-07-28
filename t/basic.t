@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockObject::Extends;
 use Test::MockObject;
 
@@ -34,6 +34,9 @@ is_deeply( $params, { foo => 1 }, "params not touched");
 $c->prepare_parameters;
 is_deeply( $params, { 'foo[bar]' => 1, 'foo' => { bar => 1 } }, "params expanded 1 level deep");
 
+%$params = ( 'foo[]' => 1 );
+$c->prepare_parameters;
+is_deeply( $params, { 'foo[]' => 1 }, "Empty first-level param not touched");
 
 %$params = ( 'foo[bar][gorch]' => 1 );
 $c->prepare_parameters;

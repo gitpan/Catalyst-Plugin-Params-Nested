@@ -8,7 +8,7 @@ use 5.8.1;
 use MRO::Compat;
 use Catalyst::Plugin::Params::Nested::Expander ();
 
-our $VERSION = "0.03";
+our $VERSION = "0.04";
 
 sub prepare_parameters {
     my $c = shift;
