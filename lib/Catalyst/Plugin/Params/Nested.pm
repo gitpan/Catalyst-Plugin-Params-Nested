@@ -8,9 +8,9 @@ use 5.8.1;
 use MRO::Compat;
 use Catalyst::Plugin::Params::Nested::Expander ();
 
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 
-sub prepare_parameters {
+sub prepare_uploads {
     my $c = shift;
     my $ret = $c->maybe::next::method( @_ );
 
@@ -93,9 +93,9 @@ either the dot or the square brackets, will be returned as a further deeper hash
 
 =over 4
 
-=item prepare_parameters
+=item prepare_uploads
 
-Overrides L<Catalyst/prepare_parameters> to expand the parameter data structure
+Overrides L<Catalyst/prepare_uploads> to expand the parameter data structure
 post factum.
 
 =back

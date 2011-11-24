@@ -51,9 +51,9 @@ DESCRIPTION
     square brackets, will be returned as a further deeper hashref.
 
 INTERNAL METHODS
-    prepare_parameters
-        Overrides "prepare_parameters" in Catalyst to expand the parameter
-        data structure post factum.
+    prepare_uploads
+        Overrides "prepare_uploads" in Catalyst to expand the parameter data
+        structure post factum.
 
 CAVEATS
     No attempt is made to merge data intelligently. If you do this:
